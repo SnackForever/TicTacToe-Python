@@ -4,36 +4,36 @@ import os
 
 grid = []
 
-def main():
 
+def main():
     for i in range(3):
         grid.append([])
         for _ in range(3):
             grid[i].append(" ")
 
-    resetGrid()
+    reset_grid()
 
     while (
-        checkWinner() == " "
-        and checkFreeSpace() != 0
-        and (checkWinner() == " " or checkFreeSpace() == 0)
+        check_winner() == " "
+        and check_free_space() != 0
+        and (check_winner() == " " or check_free_space() == 0)
     ):
-        displayGrid()
-        movePlayer()
+        display_grid()
+        move_player()
 
-        if checkWinner() != " " and checkFreeSpace() != 0:
+        if check_winner() != " " and check_free_space() != 0:
             break
-        moveComputerBot()
+        move_computer_bot()
 
-    sayWinner(checkWinner())
+    say_winner(check_winner())
 
 
-def resetGrid():
+def reset_grid():
     for i, j in itertools.product(range(3), range(3)):
         grid[i][j] = " "
 
 
-def displayGrid():
+def display_grid():
     print("\n")
     print(f" {grid[0][0]} | {grid[0][1]} | {grid[0][2]}")
     print("---|---|---")
@@ -42,8 +42,8 @@ def displayGrid():
     print(f" {grid[2][0]} | {grid[2][1]} | {grid[2][2]}")
 
 
-def movePlayer():
-    displayGrid()
+def move_player():
+    display_grid()
     while True:
         row = int(input("Row: "))
         column = int(input("Column: "))
@@ -52,7 +52,7 @@ def movePlayer():
             column -= 1
             if grid[row][column] == " ":
                 grid[row][column] = "X"
-                displayGrid()
+                display_grid()
                 break
             else:
                 print("This cell is already occupied. Try again.")
@@ -60,7 +60,7 @@ def movePlayer():
             print("Invalid input. Please enter row and column numbers between 1 and 3.")
 
 
-def moveComputer():
+def move_computer_bot():
     while True:
         row = random.randint(0, 2)
         column = random.randint(0, 2)
@@ -69,51 +69,27 @@ def moveComputer():
             break
 
 
-def moveComputerBot():
-
-    for i in range(2):
-
-        if grid[i][0] == grid[i][2] and grid[i][0] == "X":
-            grid[i][1] = "0"
-
-        elif grid[i][0] == grid[i][1] and grid[i][0] == "X":
-            grid[i][2] == "0"
-
-    for j in range(2):
-
-        if grid[0][j] == grid[2][j] and grid[0][j] == "X":
-            grid[1][j] == "0"
-
-        elif grid[0][j] == grid[1][j] and grid[0][j] == "X":
-                grid[2][j] == "0"
-
-    if grid[2][2] == " ":
-        grid[2][2] == "0"
+def check_free_space():
+    return 9 - sum(grid[i][j] != " " for i, j in itertools.product(range(3), range(3)))
 
 
-
-def checkFreeSpace():
-    return 9 - sum(
-        grid[i][j] != " " for i, j in itertools.product(range(3), range(3))
-    )
-
-
-def checkWinner():
+def check_winner():
     for i in range(3):
         if grid[i][0] == grid[i][1] == grid[i][2] != " ":
             return grid[i][0]
 
-    return next(
-        (
-            grid[0][j]
-            for j in range(3)
-            if grid[0][j] == grid[1][j] == grid[2][j] != " "
-        ),
-        grid[0][0] if grid[0][0] == grid[1][1] == grid[2][2] != " " else " ",
-    )
+    for j in range(3):
+        if grid[0][j] == grid[1][j] == grid[2][j] != " ":
+            return grid[0][j]
+
+    if grid[0][0] == grid[1][1] == grid[2][2] != " ":
+        return grid[0][0]
+
+    return " "
 
 
-def sayWinner(winner):
+
+def say_winner(winner):
     if winner == "X":
         print("You win!")
     elif winner == "0":
