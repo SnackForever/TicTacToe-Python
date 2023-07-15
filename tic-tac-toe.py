@@ -1,23 +1,17 @@
 import itertools
 import random
-import os
+
 
 grid = []
 
 
 def main():
     for i in range(3):
-        grid.append([])
-        for _ in range(3):
-            grid[i].append(" ")
+        grid.append([" "] * 3)
 
     reset_grid()
 
-    while (
-        check_winner() == " "
-        and check_free_space() != 0
-        and (check_winner() == " " or check_free_space() == 0)
-    ):
+    while check_winner() == " " and check_free_space() != 0:
         display_grid()
         move_player()
 
@@ -65,7 +59,7 @@ def move_computer_bot():
         row = random.randint(0, 2)
         column = random.randint(0, 2)
         if grid[row][column] == " ":
-            grid[row][column] = "0"
+            grid[row][column] = "O"
             break
 
 
@@ -88,11 +82,10 @@ def check_winner():
     return " "
 
 
-
 def say_winner(winner):
     if winner == "X":
         print("You win!")
-    elif winner == "0":
+    elif winner == "O":
         print("You lose!")
     else:
         print("It's a tie!")
